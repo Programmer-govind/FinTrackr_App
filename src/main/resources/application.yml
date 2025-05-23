@@ -2,9 +2,9 @@ spring:
   application:
     name: fintrackr-backend
   datasource:
-    url: postgresql://gautam_govind:dlKXsPQcQFERvRUjI2rCuBp9qL6m5QGz@dpg-d0o2d08dl3ps73a6tppg-a/fintrackr_backend_db
-    username: gautam_govind
-    password: dlKXsPQcQFERvRUjI2rCuBp9qL6m5QGz
+    url: ${postgres_url}
+    username: ${postgres_user}
+    password: ${postgres_passwd}
   jpa:
     hibernate:
       ddl-auto: update
