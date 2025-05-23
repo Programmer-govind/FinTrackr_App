@@ -19,7 +19,7 @@ import com.fintrackr.app.model.Transaction;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://gautam-govind-fintrackr-app.netlify.app")
 @RestController
 @RequestMapping("/api/transactions")
 public class TransactionController {
