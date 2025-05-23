@@ -1,15 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import TransactionModal from './components/TransactionModal';
 import TransactionList from './components/TransactionList';
+import {
+  fetchTransactions,
+  addTransaction as apiAddTransaction,
+  updateTransaction as apiUpdateTransaction,
+  deleteTransaction as apiDeleteTransaction,
+} from './api';
 
 function App() {
-  const [transactions, setTransactions] = useState(
-    JSON.parse(localStorage.getItem('transactions')) || []
-  );
+  const [transactions, setTransactions] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentTransactionIndex, setCurrentTransactionIndex] = useState(null);
   const [filterCategory, setFilterCategory] = useState('All');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setLoading(true);
+    fetchTransactions()
+      .then(data => setTransactions(data))
+      .catch(err => setError(err.message))
+      .finally(() => setLoading(false));
+  }, []);
 
   const filteredTransactions =
     filterCategory === 'All'
@@ -17,37 +31,59 @@ function App() {
       : transactions.filter((transaction) => transaction.category === filterCategory);
 
   const totalCredits = transactions
-    .filter((transaction) => transaction.type === 'Credit')
-    .reduce((sum, transaction) => sum + (transaction.amount || 0), 0);
+    .filter((transaction) => transaction.type && transaction.type.toLowerCase() === 'credit')
+    .reduce((sum, transaction) => sum + Number(transaction.amount || 0), 0);
 
   const totalDebits = transactions
-    .filter((transaction) => transaction.type === 'Debit')
-    .reduce((sum, transaction) => sum + (transaction.amount || 0), 0);
+    .filter((transaction) => transaction.type && transaction.type.toLowerCase() === 'debit')
+    .reduce((sum, transaction) => sum + Number(transaction.amount || 0), 0);
 
   const netBalance = totalCredits - totalDebits;
 
-  console.log('Total Credits:', totalCredits);
-  console.log('Total Debits:', totalDebits);
-  console.log('Net Balance:', netBalance);
-
-  const addTransaction = (transaction) => {
-    const updatedTransactions = [...transactions, transaction];
-    setTransactions(updatedTransactions);
-    localStorage.setItem('transactions', JSON.stringify(updatedTransactions));
+  const refreshTransactions = () => {
+    setLoading(true);
+    fetchTransactions()
+      .then(data => setTransactions(data))
+      .catch(err => setError(err.message))
+      .finally(() => setLoading(false));
   };
 
-  const updateTransaction = (index, updatedTransaction) => {
-    const updatedTransactions = transactions.map((transaction, i) =>
-      i === index ? updatedTransaction : transaction
-    );
-    setTransactions(updatedTransactions);
-    localStorage.setItem('transactions', JSON.stringify(updatedTransactions));
+  const addTransaction = async (transaction) => {
+    setLoading(true);
+    setError(null);
+    try {
+      await apiAddTransaction(transaction);
+      refreshTransactions();
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
   };
 
-  const deleteTransaction = (index) => {
-    const updatedTransactions = transactions.filter((_, i) => i !== index);
-    setTransactions(updatedTransactions);
-    localStorage.setItem('transactions', JSON.stringify(updatedTransactions));
+  const updateTransaction = async (index, updatedTransaction) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const id = transactions[index].id;
+      await apiUpdateTransaction(id, updatedTransaction);
+      refreshTransactions();
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
+  const deleteTransaction = async (index) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const id = transactions[index].id;
+      await apiDeleteTransaction(id);
+      refreshTransactions();
+    } catch (err) {
+      setError(err.message);
+      setLoading(false);
+    }
   };
 
   const handleEdit = (index) => {
@@ -85,6 +121,8 @@ function App() {
           <p><strong>Total Debits:</strong> ${totalDebits.toFixed(2)}</p>
           <p><strong>Net Balance:</strong> ${netBalance.toFixed(2)}</p>
         </div>
+        {loading && <p>Loading...</p>}
+        {error && <p style={{color: 'red'}}>{error}</p>}
         <TransactionList 
           transactions={filteredTransactions} 
           onDelete={deleteTransaction} 
