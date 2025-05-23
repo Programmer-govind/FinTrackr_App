@@ -104,6 +104,12 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1>FinTrackr</h1>
+        <p style={{ fontSize: '1.2rem', margin: '10px 0 25px 0', color: '#b3e5fc', fontWeight: 500 }}>
+          Your Smart Personal Finance Tracker &amp; Insights Dashboard
+        </p>
+        <p style={{ fontSize: '1rem', margin: '0 0 30px 0', color: '#e0f7fa' }}>
+          Effortlessly manage your credits and debits, analyze spending by category, and gain real-time insights into your financial health.
+        </p>
         <button onClick={() => setIsModalOpen(true)}>Add Transaction</button>
         <label>
           Filter by Category:
