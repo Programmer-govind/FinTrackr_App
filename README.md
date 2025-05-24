@@ -6,43 +6,67 @@
 
 ## Features ✨
 
-* **Income & Expense Management**: Add, update, and track your income and expense transactions effortlessly.
-* **Transaction Categorization**: Categorize transactions for a detailed overview of spending patterns.
-* **Responsive Design**: Fully optimized for desktop, tablet, and mobile devices for seamless usage on any screen size.
-* **Modern UI**: Built with React.js for a sleek and intuitive interface.
+- Add, edit, and delete transactions (credit/debit)
+- Filter transactions by category
+- Real-time insights: total credits, debits, and net balance
+- Responsive, modern UI
+- Persistent storage with PostgreSQL
+- RESTful API with OpenAPI/Swagger documentation
 
 ## Technologies Used 🛠️
+- **Frontend:** React, CSS, Netlify
+- **Backend:** Spring Boot, Java, PostgreSQL, Render
+- **API Docs:** Swagger/OpenAPI (springdoc-openapi)
 
-* **Frontend**: React.js
-* **Styling**: CSS3
-* **Storage**: Local Storage
+  ---
 
-## Installation Guide 🖥️
+## 📦 Getting Started (Local Development)
 
-Follow these steps to set up the project locally:
+### Prerequisites
+- Node.js & npm
+- Java 17+
+- Maven
+- PostgreSQL
 
-### Clone the Repository
-
+### 1. Clone the Repository
 ```bash
-git clone https://github.com/Programmer-govind/FinTrackr_App.git
-cd smart_fintrackr
+git clone https://github.com/your-username/fintrackr.git
+cd fintrackr
 ```
 
-### Install Dependencies
-
+### 2. Backend Setup
+- Configure your PostgreSQL database in `fintrackr-backend/src/main/resources/application.yml`.
+- Build and run the backend:
 ```bash
+cd fintrackr-backend
+./mvnw spring-boot:run
+```
+- Swagger UI: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+
+### 3. Frontend Setup
+- Set the API URL in `smart_fintracker/src/api.js` or via `.env`:
+  - `.env`: `REACT_APP_API_URL=http://localhost:8080/api/transactions`
+- Install dependencies and start the app:
+```bash
+cd ../smart_fintracker
 npm install
-```
-
-### Start the Application
-
-```bash
 npm start
 ```
+- App: [http://localhost:3000](http://localhost:3000)
 
-### Open in Browser
+---
 
-Visit `http://localhost:3000` in your browser to view the application.
+## 🌐 Deployment
+- **Frontend:** Deploy `smart_fintracker` to Netlify. Set `REACT_APP_API_URL` in Netlify environment variables to your backend URL.
+- **Backend:** Deploy `fintrackr-backend` to Render/Heroku/AWS. Ensure CORS is set to allow your Netlify domain.
+
+---
+
+## 📄 API Documentation
+- Swagger UI: `/swagger-ui.html` on your backend deployment
+- OpenAPI JSON: `/v3/api-docs`
+
+---
 
 ## Screenshots 📸
 
