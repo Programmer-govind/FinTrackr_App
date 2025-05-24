@@ -111,7 +111,7 @@ function App() {
           Effortlessly manage your credits and debits, analyze spending by category, and gain real-time insights into your financial health.
         </p>
         <button onClick={() => setIsModalOpen(true)}>Add Transaction</button>
-        <label>
+        <label style={{ color: 'white', fontWeight: 'bold', fontSize: '1rem' }}>
           Filter by Category:
           <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
             <option value="All">All</option>
