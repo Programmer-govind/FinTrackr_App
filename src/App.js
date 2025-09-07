@@ -25,6 +25,14 @@ function App() {
       .finally(() => setLoading(false));
   }, []);
 
+  // Keep-alive ping to backend every 10 minutes
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetch('https://fintrackr-app.onrender.com/ping'); // lightweight endpoint
+    }, 10 * 60 * 1000); // every 10 minutes
+    return () => clearInterval(interval);
+  }, []);
+
   const filteredTransactions =
     filterCategory === 'All'
       ? transactions
